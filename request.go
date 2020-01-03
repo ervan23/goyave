@@ -226,3 +226,12 @@ func (r *Request) validate() map[string]validation.Errors {
 
 	return nil
 }
+
+// Add data to request Data object
+func (r *Request) AddData(key string, value interface{}) {
+	if r.Data[key] != nil {
+		log.Panicf("Field \"%s\" is used", key)
+	}
+
+	r.Data[key] = value
+}

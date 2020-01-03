@@ -207,3 +207,25 @@ func TestRequestCors(t *testing.T) {
 	options.MaxAge = time.Second
 	assert.NotEqual(t, request.corsOptions.MaxAge, options.MaxAge)
 }
+
+func TestRequestAddData(t *testing.T) {
+	type User struct {
+		FirstName string
+		LastName  string
+	}
+
+	request := createTestRequest(httptest.NewRequest("POST", "/test-route", nil))
+	request.Data = map[string]interface{}{
+		"firstname": "Golang",
+		"lastname":  "Goyave",
+	}
+
+	user := User{
+		FirstName: request.String("firstname"),
+		LastName:  request.String("lastname"),
+	}
+
+	request.AddData("user", user)
+
+	assert.IsType(t, user, request.Data["user"].(User))
+}
